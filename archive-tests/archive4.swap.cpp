@@ -1,6 +1,4 @@
-// 25/30 cases
-
-#include <bits/stdc++.h>
+#include "bits/stdc++.h"
 #define DEBUG false
 
 using namespace std;
@@ -27,6 +25,23 @@ long long iterate() {
     return value;
 }
 
+long long swapping() {
+    long long value = 0;
+    for (int i = 1; i < n - 1; ++i) {
+        if (b[i-1] > b[i] && b[i+1] > b[i]) {
+            int cost1 = abs(b[i] - a[i]);
+            int cost2 = abs((b[i] + 2*H) - a[i]);
+            if (cost2 < cost1) value += abs(cost1 - cost2);
+        } else {
+            int cost1 = abs(b[i] - a[i]);
+            int cost2 = abs((b[i] - 2*H) - a[i]);
+            if (cost2 < cost1) value += abs(cost1 - cost2);
+        }
+    }
+
+    return value;
+}
+
 void reset() {
     for (int i = 0; i < n; ++i) b[i] = a[i];
 }
@@ -43,9 +58,10 @@ long long bs(int maxElement) {
         int DOWN = b[0];
         DEBUG && cout << b[0] << ", ";
         long long valueDown = iterate();
+        long long swapAddDown = swapping();
         int costDown = abs(a[0] - b[0]);
         
-        DEBUG && cout << " - cost: " << valueDown + costDown << endl;
+        DEBUG && cout << " - cost: " << valueDown + costDown - swapAddDown << endl;
 
         reset();
 
@@ -53,15 +69,19 @@ long long bs(int maxElement) {
         int UP = b[0];
         DEBUG && cout << b[0] << ", ";
         long long valueUp = iterate();
+        long long swapAddUp = swapping();
         int costUp = abs(a[0] - b[0]);
 
-        DEBUG && cout << " - cost: " << valueUp + costUp << endl;
+        DEBUG && cout << " - cost: " << valueUp + costUp - swapAddUp << endl;
 
         reset();
 
-        BEST = min(BEST, min(valueDown + costDown, valueUp + costUp));
+        long long finalCostDown = valueDown + costDown - swapAddDown;
+        long long finalCostUp = valueUp + costUp - swapAddUp;
 
-        if (valueDown + costDown < valueUp + costUp) {
+        BEST = min(BEST, min(finalCostDown, finalCostUp));
+
+        if (finalCostDown < finalCostUp) {
             MAX = UP;
         } else {
             MIN = DOWN + 1;

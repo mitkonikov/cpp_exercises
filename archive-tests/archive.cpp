@@ -1,30 +1,41 @@
-// 25/30 cases
-
 #include <bits/stdc++.h>
 #define DEBUG false
 
 using namespace std;
 
-int a[200000];
-int b[200000];
+int a[200000]; // Initial Array
+int b[200000]; // Array used for calculations
+
+// DP Map from pair < element, height > to solution cost
+map<  pair<  int, int  >, long long  > dpmap;
+
+// Input params
 int n, H;
 
-long long iterate() {
-    long long value = 0;
-    for (int i = 1; i < n; ++i) {
-        int prev = b[i];
-        if (b[i] > b[i - 1] + H) {
-            b[i] = b[i - 1] + H;
-            value += prev - b[i];
-        } else if (b[i] < b[i - 1] - H) {
-            b[i] = b[i - 1] - H;
-            value += b[i] - prev;
-        }
-
-        DEBUG && cout << b[i] << ", ";
+long long dp(int i, int height) {
+    if (i == n - 1) {
+        // We are at the end of the line
+        return abs(b[i] - a[i]);
+    }
+    
+    map<pair<int, int>, long long>::iterator checkDP = dpmap.find(make_pair(i, height));
+    if (checkDP != dpmap.end()) {
+        return checkDP->second;
     }
 
-    return value;
+    long long currentCost = abs(b[i] - a[i]);
+
+    b[i + 1] = b[i] + H;
+    long long upCost = dp(i + 1, b[i + 1]);
+
+    b[i + 1] = b[i] - H;
+    long long downCost = dp(i + 1, b[i + 1]);
+    
+    b[i + 1] = a[i + 1];
+
+    long long rightCost = min(upCost, downCost) + currentCost;
+    dpmap[make_pair(i, height)] = rightCost;
+    return rightCost;
 }
 
 void reset() {
@@ -42,26 +53,26 @@ long long bs(int maxElement) {
         b[0] = (MIN + mid) / 2;
         int DOWN = b[0];
         DEBUG && cout << b[0] << ", ";
-        long long valueDown = iterate();
+        long long valueDown = dp(0, b[0]);
         int costDown = abs(a[0] - b[0]);
         
-        DEBUG && cout << " - cost: " << valueDown + costDown << endl;
+        DEBUG && cout << " - cost: " << valueDown << endl;
 
         reset();
 
         b[0] = (mid + MAX) / 2;
         int UP = b[0];
         DEBUG && cout << b[0] << ", ";
-        long long valueUp = iterate();
+        long long valueUp = dp(0, b[0]);
         int costUp = abs(a[0] - b[0]);
 
-        DEBUG && cout << " - cost: " << valueUp + costUp << endl;
+        DEBUG && cout << " - cost: " << valueUp << endl;
 
         reset();
 
-        BEST = min(BEST, min(valueDown + costDown, valueUp + costUp));
+        BEST = min(BEST, min(valueDown, valueUp));
 
-        if (valueDown + costDown < valueUp + costUp) {
+        if (valueDown < valueUp) {
             MAX = UP;
         } else {
             MIN = DOWN + 1;
