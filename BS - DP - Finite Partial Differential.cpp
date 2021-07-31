@@ -14,15 +14,16 @@ map<  int, long long  > finalCost;
 
 // Input params
 int n, H;
-
-int counti = 0;
+long long upCost = LLONG_MAX;
+long long downCost = LLONG_MAX;
+int maxElement = INT_MIN;
 
 long long dp(int i, int height) {
-    counti++;
+    long long currentCost = abs(b[i] - a[i]);
 
     if (i == n - 1) {
         // We are at the end of the line
-        return abs(b[i] - a[i]);
+        return currentCost;
     }
     
     checkDP = dpmap[i].find(height);
@@ -30,15 +31,21 @@ long long dp(int i, int height) {
         return checkDP->second;
     }
 
-    long long currentCost = abs(b[i] - a[i]);
+    if (b[i] + (long)H <= maxElement) {
+        b[i + 1] = b[i] + H;
+        upCost = dp(i + 1, b[i + 1]);
+    } else {
+        upCost = LLONG_MAX;
+    }
 
-    b[i + 1] = b[i] + H;
-    long long upCost = dp(i + 1, b[i + 1]);
+    if (b[i] - H >= 0) {
+        b[i + 1] = b[i] - H;
+        downCost = dp(i + 1, b[i + 1]);
+    } else {
+        downCost = LLONG_MAX;
+    }
 
-    b[i + 1] = b[i] - H;
-    long long downCost = dp(i + 1, b[i + 1]);
-    
-    b[i + 1] = a[i + 1];
+    b[i + 1] = a[i + 1]; // Reset
 
     long long rightCost = min(upCost, downCost) + currentCost;
     dpmap[i][height] = rightCost;
@@ -52,7 +59,7 @@ void reset() {
     }
 }
 
-long long bs(int maxElement) {
+long long bs() {
     long long MAX = maxElement;
     int MIN = 0;
     long long BEST = LLONG_MAX;
@@ -71,10 +78,9 @@ long long bs(int maxElement) {
             valueDown = checkDP->second;
         } else {
             valueDown = dp(0, DOWN);
+            finalCost[DOWN] = valueDown;
         }
         
-        cout << "COUNT: " << counti << endl;
-        counti = 0;
         DEBUG && cout << " - cost: " << valueDown << endl;
 
         reset();
@@ -90,6 +96,7 @@ long long bs(int maxElement) {
             valueUp = checkDP->second;
         } else {
             valueUp = dp(0, UP);
+            finalCost[UP] = valueUp;
         }
 
         DEBUG && cout << " - cost: " << valueUp << endl;
@@ -113,7 +120,6 @@ int main() {
 
     cin >> n >> H;
 
-    int maxElement = INT_MIN;
     bool run = false;
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
@@ -127,7 +133,7 @@ int main() {
     }
 
     if (run) {
-        cout << bs(maxElement) << endl;
+        cout << bs() << endl;
     } else {
         cout << 0 << endl;
     }
