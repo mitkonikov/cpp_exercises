@@ -1,0 +1,409 @@
+{
+	// Place your snippets for cpp here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	"main": {
+		"prefix": "main",
+		"body": [
+			"#include <bits/stdc++.h>",
+			"",
+			"using namespace std;",
+			"",
+			"int main() {",
+			"\t${1://code}",
+			"\treturn 0;",
+			"}"
+		],
+		"description": "Empty template"
+	},
+	"ttmain": {
+		"prefix": "ttmain",
+		"body": [
+			"#include <bits/stdc++.h>",
+			"",
+			"using namespace std;",
+			"",
+			"void testCase() {",
+			"\t${1://code}",
+			"}",
+			"",
+			"int main() {",
+			"\tint t;",
+			"\tcin >> t;",
+			"",
+			"\twhile (t--) {",
+			"\t\ttestCase();",
+			"\t}",
+			"",
+			"\treturn 0;",
+			"}"
+		],
+		"description": "Empty template with test cases"
+	},
+	"gcd": {
+		"prefix": "gcd",
+		"body": [
+			"template<typename T>\r",
+			"T gcd(T a, T b) {\r",
+			"    return (a == 0) ? b : gcd(b % a, a);\r",
+			"}"
+		],
+		"description": "GCD template"
+	},
+	"sort": {
+		"prefix": "tsort",
+		"body": "sort($0.begin(), $0.end());",
+		"description": "fast sort template"
+	},
+	"fwt": {
+		"prefix": "fwt",
+		"body": [
+			"vector<int> fwt(0);\r",
+			"void addFWT(int ind, int val = 1) {\r",
+			"    for (ind++; ind < fwt.size(); ind+=ind&-ind)\r",
+			"        fwt[ind]+=val;\r",
+			"}\r",
+			"\r",
+			"int getFWT(int ind) {\r",
+			"    int s = 0;\r",
+			"    for (ind++; ind > 0; ind-=ind&-ind)\r",
+			"        s += fwt[ind];\r",
+			"    return s;\r",
+			"}\r",
+			"\r",
+			"void createFWT(vector<int> input) {\r",
+			"    fwt.resize(input.size() + 1, 0);\r",
+			"\r",
+			"    for (int i = 0; i < input.size(); i++)\r",
+			"        addFWT(i, input[i]);\r",
+			"}"
+		],
+		"description": "Fenwick Tree Snippet"
+	},
+	"segtree": {
+		"prefix": "segtree",
+		"body": [
+			"int pw = (1<<17);\r",
+			"vector<${0:long long}> seg(pw*2);\r",
+			"vector<${0:long long}> lz(pw*2);\r",
+			"${0:long long} get(int ind,int l,int r,int b,int e){\r",
+			"    if(l>=b&&r<=e) return lz[ind]*(r-l)+seg[ind];\r",
+			"    if(l>=e||r<=b) return 0;\r",
+			"    int lc=2*ind+1,rc=2*ind+2,m=(l+r)/2;\r",
+			"    lz[lc]+=lz[ind];lz[rc]+=lz[ind];lz[ind]=0;\r",
+			"    seg[ind]=get(lc,l,m,l,m)+get(rc,m,r,m,r);\r",
+			"    return get(ind*2+1,l,m,b,e)+get(ind*2+2,m,r,b,e);\r",
+			"}\r",
+			"void add(int ind,int l,int r,int b,int e, ${0:long long} v){\r",
+			"    if(l>=b&&r<=e) {lz[ind]+=v;return;}\r",
+			"    if(l>=e||r<=b) return;\r",
+			"    int lc=2*ind+1,rc=2*ind+2,m=(l+r)/2;\r",
+			"    lz[lc]+=lz[ind];lz[rc]+=lz[ind];lz[ind]=0;\r",
+			"    add(lc,l,m,b,e,v);add(rc,m,r,b,e,v);\r",
+			"    seg[ind]=get(lc,l,m,l,m)+get(rc,m,r,m,r);\r",
+			"}\r",
+			"void sadd(int l, int r, ${0:long long} v){add(0, 0, pw, l, r, v);}\r",
+			"${0:long long} sget(int l,int r){return get(0, 0, pw, l, r);}"
+		],
+		"description": "Segment Tree"
+	},
+	"tprintvec": {
+		"prefix": "tprintvec",
+		"body": [
+			"template<typename T>\r",
+			"void printVec(vector<T> vec) {\r",
+			"    for (int i = 0; i < vec.size(); i++) {\r",
+			"        cout << vec[i] << \" \";\r",
+			"    }\r",
+			"    cout << endl;\r",
+			"}"
+		],
+		"description": "Print Template Vector"
+	},
+	"printvec": {
+		"prefix": "printvec",
+		"body": [
+			"for (int i = 0; i < ${0:vec}.size(); i++) {\r",
+			"    cout << ${0:vec}[i] << \" \";\r",
+			"}\r",
+			"cout << endl;"
+		],
+		"description": "Print Vector"
+	},
+	"mpit": {
+		"prefix": "forit",
+		"body": [
+			"for (auto it = ${1:mp}.begin(); it != ${1:mp}.end(); it++) {\r",
+			"    ${2://code}\r",
+			"}"
+		],
+		"description": "For-iterator template for a map"
+	},
+	"getnextchar": {
+		"prefix": "getnextchar",
+		"body": [
+			"inline char getNextChar(char ch, int offset = 0) {\r",
+			"    int change = ((int)(ch - 'a')+1+offset)%26;\r",
+			"    return (char)(change + 'a');\r",
+			"}"
+		],
+		"description": "Simple inline function to get the next character with optional offset"
+	},
+	"reversegcd": {
+		"prefix": "reversegcd",
+		"body": [
+			"pair<ll,pair<ll,ll> > reverseGCD(ll a, ll b) {\r",
+			"\t// returns (g,(x,y))\r",
+			"    pair<ll,pair<ll,ll>> ret;\r",
+			"\tif (a==0) {\r",
+			"\t\tret.first = b;\r",
+			"\t\tret.second.first = 0;\r",
+			"\t\tret.second.second = 1;\r",
+			"\t} else {\r",
+			"\t\tll g, x, y;\r",
+			"\t\tpair<ll,pair<ll,ll>> temp = reverseGCD(b%a, a);\r",
+			"\t\tg = temp.first;\r",
+			"\t\tx = temp.second.first;\r",
+			"\t\ty = temp.second.second;\r",
+			"\t\tret.first = g;\r",
+			"\t\tret.second.first = y - (b/a)*x;\r",
+			"\t\tret.second.second = x;\r",
+			"\t}\r",
+			"\treturn ret;\r",
+			"}\r",
+			"\r",
+			"ll modinv(ll den, ll m) {\r",
+			"\tpair<ll,pair<ll,ll> > ans = reverseGCD(den, m) ;\r",
+			"\tif (ans.first == 1) return (ans.second.first + m) % m;\r",
+			"}\r",
+			"\r",
+			"// den and m must be coprime\r",
+			"ll moddiv(ll num, ll den, ll m) {\r",
+			"\treturn (num * modinv(den,m) ) % m;\r",
+			"}"
+		],
+		"description": "Reverse Euclidean Algorithm"
+	},
+	"matrixexpo": {
+		"prefix": "matrixexpo",
+		"body": [
+			"#define MX vector<vector<T>>\r",
+			"#define MOD 1000000007\r",
+			"\r",
+			"template<typename T>\r",
+			"class Matrix { // Only for NxN matrix\r",
+			"public:\r",
+			"    MX m;\r",
+			"    int n;\r",
+			"    Matrix(int n) {\r",
+			"        this->n = n;\r",
+			"        m.resize(n, vector<T>(n, 0));\r",
+			"    }\r",
+			"\r",
+			"    Matrix(const MX &copy) {\r",
+			"        this->m = MX(copy);\r",
+			"        this->n = copy.size();\r",
+			"    }\r",
+			"\r",
+			"    void print() const {\r",
+			"        for (int i = 0; i < m.size(); i++) {\r",
+			"            for (int j = 0; j < m[i].size(); j++) {\r",
+			"                cout << m[i][j] << \" \";\r",
+			"            }\r",
+			"\r",
+			"            cout << \"\\n\";\r",
+			"        }\r",
+			"        cout << flush;\r",
+			"    }\r",
+			"\r",
+			"    Matrix operator*(const Matrix &b) const {\r",
+			"        Matrix<T> result(n);\r",
+			"        for (int i = 0; i < n; i++) {\r",
+			"            for (int j = 0; j < n; j++) {\r",
+			"                for (int k = 0; k < n; k++) {\r",
+			"                    result.m[i][j] = (result.m[i][j] + (this->m[i][k] * b.m[k][j]) % MOD) % MOD;\r",
+			"                }\r",
+			"            }\r",
+			"        }\r",
+			"\r",
+			"        return result;\r",
+			"    }\r",
+			"\r",
+			"    Matrix binary(long long power) const {\r",
+			"        Matrix<T> a(this->m);\r",
+			"        Matrix<T> result(n);\r",
+			"        for (int i = 0; i < n; i++) result.m[i][i] = 1;\r",
+			"\r",
+			"        while (power > 0) {\r",
+			"            if (power % 2 == 1) {\r",
+			"                result = result * a;\r",
+			"                power--;\r",
+			"            }\r",
+			"\r",
+			"            a = a * a;\r",
+			"            power /= 2;\r",
+			"        }\r",
+			"\r",
+			"        return result;\r",
+			"    }\r",
+			"};"
+		],
+		"description": "Matrix Class"
+	},
+	"intersects": {
+		"prefix": "intersects",
+		"body": [
+			"inline bool intersects(int left, int right, int newLeft, int newRight) {\r",
+			"    if (right >= newLeft && right <= newRight) return true;\r",
+			"    if (left <= newRight && left >= newLeft) return true;\r",
+			"    return false;\r",
+			"}"
+		],
+		"description": "Inline bool function for intersection"
+	},
+	"defll": {
+		"prefix": "defll",
+		"body": "#define ll long long",
+		"description": "define long long as ll"
+	},
+	"isvalid": {
+		"prefix": "isvalid",
+		"body": [
+			"inline bool valid(int x, int y, int w, int h) {\r",
+			"    return (x >= 0 && x < w && y >= 0 && y < h);\r",
+			"}"
+		],
+		"description": "inline bool function that checks if a coordinate is valid"
+	},
+	"dxdy8": {
+		"prefix": "dxdy8",
+		"body": [
+			"const int dx[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };\r",
+			"const int dy[8] = { -1, 1, 0, 0, 1, -1, -1, 1 };"
+		],
+		"description": "dx, dy arrays"
+	},
+	"checkRectPrefix": {
+		"prefix": "checkRectPrefix",
+		"body": [
+			"auto checkPrefix = [&](int* vector, int mx) -> Match {\r",
+			"        bool ok = true, start = false;\r",
+			"        int firstOcc = 0, lastOcc = 0;\r",
+			"        int pref = -1;\r",
+			"        for (int i = 0; i < mx; i++) {\r",
+			"            if (vector[i] != 0) {\r",
+			"                if (!start) firstOcc = i;\r",
+			"                lastOcc = i;\r",
+			"                pref = vector[i];\r",
+			"                start = true;\r",
+			"            }\r",
+			"\r",
+			"            if (start && vector[i] != 0 && i > 0 && vector[i-1] != 0 && vector[i] != vector[i-1]) {\r",
+			"                ok = false;\r",
+			"            }\r",
+			"        }\r",
+			"\r",
+			"        return { ok, lastOcc - firstOcc + 1, pref };\r",
+			"    };"
+		],
+		"description": "Lambda function for checking if a col/row sum can be a rectangle"
+	},
+	"rotatemat": {
+		"prefix": "rotatemat",
+		"body": [
+			"template<typename T>\r",
+			"vector<vector<T>> rotate(const vector<vector<T>>& matrix, int x, int y) {\r",
+			"    vector<vector<T>> result(x, vector<T>(y, 0));\r",
+			"\r",
+			"    int newColumn, newRow = 0;\r",
+			"    for (int oldColumn = x - 1; oldColumn >= 0; oldColumn--) {\r",
+			"        newColumn = 0;\r",
+			"        for (int oldRow = 0; oldRow < y; oldRow++) {\r",
+			"            result[newRow][newColumn] = matrix[oldRow][oldColumn];\r",
+			"            newColumn++;\r",
+			"        }\r",
+			"        newRow++;\r",
+			"    }\r",
+			"\r",
+			"    return result;\r",
+			"}"
+		],
+		"description": "Rotate a Matrix - template function"
+	},
+	"flipnnh": {
+		"prefix": "flipnnh",
+		"body": [
+			"template<typename T>\r",
+			"vector<vector<T>> flipH(const vector<vector<T>> &matrix, int n) {\r",
+			"    vector<vector<T>> result(n, vector<T>(n, 0));\r",
+			"\r",
+			"    for (int i = 0; i < n; i++) {\r",
+			"        for (int j = 0; j < n; j++) {\r",
+			"            result[i][j] = matrix[i][n-j-1];\r",
+			"        }\r",
+			"    }\r",
+			"\r",
+			"    return result;\r",
+			"}"
+		],
+		"description": "Flip a NxN matrix horizontally - Template Function"
+	},
+	"flipnnv": {
+		"prefix": "flipnnv",
+		"body": [
+			"template<typename T>\r",
+			"vector<vector<T>> flipV(const vector<vector<T>> &matrix, int n) {\r",
+			"    vector<vector<T>> result(n, vector<T>(n, 0));\r",
+			"\r",
+			"    for (int i = 0; i < n; i++) {\r",
+			"        for (int j = 0; j < n; j++) {\r",
+			"            result[i][j] = matrix[n-i-1][j];\r",
+			"        }\r",
+			"    }\r",
+			"\r",
+			"    return result;\r",
+			"}"
+		],
+		"description": "Flip NxN matrix vertically - Template Function"
+	},
+	"chinese": {
+		"prefix": "chinese",
+		"body": [
+			"template<typename T>\r",
+			"T CRT(vector<T> n, vector<T> a) {\r",
+			"    // n divisor, a is the remainder\r",
+			"\r",
+			"    T Wi = n[0], remainder = a[0];\r",
+			"    int k = n.size();\r",
+			"\r",
+			"    for (int i = 1; i < k; ++i) {\r",
+			"        T wi = n[i];\r",
+			"        T bi = a[i];\r",
+			"        auto rGCD = reverseGCD(Wi,wi);\r",
+			"        T x = rGCD.second.first, y = rGCD.second.second;\r",
+			"\r",
+			"        T c = bi - remainder;\r",
+			"\r",
+			"        if (c % rGCD.first) // indicates that no result\r",
+			"            return LLONG_MAX;\r",
+			"\r",
+			"        T W = wi / rGCD.first;\r",
+			"        remainder += Wi*(((c/rGCD.first*x)%W+W)%W);\r",
+			"        Wi *= W;\r",
+			"    }\r",
+			"\r",
+			"    // represents the remainder of all zeros\r",
+			"    if (!remainder) {\r",
+			"        remainder = 1;\r",
+			"        for(int i=0;i<k;++i)\r",
+			"            remainder = remainder * n[i] / gcd(remainder, n[i]);\r",
+			"    }\r",
+			"\r",
+			"    return remainder;\r",
+			"}"
+		],
+		"description": "Chinese Remainder Theorem works with noncoprime moduli"
+	}
+}
